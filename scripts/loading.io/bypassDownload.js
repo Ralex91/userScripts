@@ -46,10 +46,11 @@
   }
 
   const onElementAvailable = (selector, callback) => {
-    const observer = new MutationObserver((mutations) => {
-      if (document.querySelector(selector)) {
+    const observer = new MutationObserver(() => {
+      const element = document.querySelector(selector)
+      if (element) {
         observer.disconnect()
-        callback()
+        callback(element)
       }
     })
 
@@ -83,9 +84,7 @@
     document.body.removeChild(a)
   }
 
-  function init() {
-    const viewer = document.querySelector(".lde-viewer")
-    const svg = viewer.querySelector("svg")
+  function init(svg) {
     const buttonReplace = document.querySelector(".lde-downloads")
 
     const customButton = document.createElement("button")
@@ -95,9 +94,7 @@
 
     buttonReplace.appendChild(customButton)
 
-    onElementAvailable("#bypassed", () => {
-      const button = document.querySelector("#bypassed")
-
+    onElementAvailable("#bypassed", (button) => {
       button.addEventListener("click", () => {
         downloadSVG(svg)
       })
